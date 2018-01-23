@@ -1,0 +1,2652 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     89336,       2644]
+NotebookOptionsPosition[     89056,       2630]
+NotebookOutlinePosition[     89398,       2645]
+CellTagsIndexPosition[     89355,       2642]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Quit", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.6899691480639267`*^9, 3.689969149501809*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "Needs", "[", "\"\<DifferentialEquations`NDSolveProblems`\>\"", "]"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+  "Needs", "[", "\"\<DifferentialEquations`NDSolveUtilities`\>\"", "]"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+  "Needs", "[", "\"\<DifferentialEquations`InterpolatingFunctionAnatomy`\>\"",
+    "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Needs", "[", "\"\<GUIKit`\>\"", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"q", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"xBall", "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"yBall", "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"xCube", "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"yCube", "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\[Theta]Cube", "[", "t", "]"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dq", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{"q", ",", "t"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ddq", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{"dq", ",", "t"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mBall", "=", "100"}], ";", 
+  RowBox[{"\[Rho]", "=", "400"}], ";", 
+  RowBox[{"wCube", "=", "1"}], ";", 
+  RowBox[{"hCube", "=", "1"}], ";", 
+  RowBox[{"lCube", "=", "3"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"rBall", "=", "0.5"}], ";", 
+  RowBox[{"g", "=", "9.8"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mCube", "=", 
+   RowBox[{"wCube", " ", "hCube", " ", "lCube", " ", "\[Rho]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ICube", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"mCube", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "mCube", ",", "0", ",", "0", ",", "0", ",", "0"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "mCube", ",", "0", ",", "0", ",", "0"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "0", ",", 
+       RowBox[{
+        RowBox[{"mCube", "/", "12"}], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"hCube", "^", "2"}], "+", 
+          RowBox[{"lCube", "^", "2"}]}], ")"}]}], ",", "0", ",", "0"}], "}"}],
+      ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "0", ",", "0", ",", 
+       RowBox[{
+        RowBox[{"mCube", "/", "12"}], 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"wCube", "^", "2"}], "+", 
+          RowBox[{"lCube", "^", "2"}]}], ")"}]}], ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       RowBox[{
+        RowBox[{"mCube", "/", "12"}], 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"wCube", "^", "2"}], "+", 
+          RowBox[{"hCube", "^", "2"}]}], ")"}]}]}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxBall", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{
+     RowBox[{"xBall", "[", "t", "]"}], ",", "t"}], "]"}]}], ";", 
+  RowBox[{"vyBall", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{
+     RowBox[{"yBall", "[", "t", "]"}], ",", "t"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxCube", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{
+     RowBox[{"xCube", "[", "t", "]"}], ",", "t"}], "]"}]}], ";", 
+  RowBox[{"vyCube", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{
+     RowBox[{"yCube", "[", "t", "]"}], ",", "t"}], "]"}]}], ";", 
+  RowBox[{"d\[Theta]Cube", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{
+     RowBox[{"\[Theta]Cube", "[", "t", "]"}], ",", "t"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VCube", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", "vxCube", "}"}], ",", 
+     RowBox[{"{", "vyCube", "}"}], ",", 
+     RowBox[{"{", "0", "}"}], ",", 
+     RowBox[{"{", "0", "}"}], ",", 
+     RowBox[{"{", "0", "}"}], ",", 
+     RowBox[{"{", "d\[Theta]Cube", "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"xBalld", "=", "1"}], ";", 
+   RowBox[{"yBalld", "=", "1"}], ";", 
+   RowBox[{"k", "=", "6000"}], ";", 
+   RowBox[{"energyRate", "=", "0.3"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"KE", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"1", "/", "2"}], "*", "mBall", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"vxBall", "^", "2"}], "+", 
+       RowBox[{"vyBall", "^", "2"}]}], ")"}]}], "+", 
+    RowBox[{
+     RowBox[{"1", "/", "2"}], "*", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"VCube", "\[Transpose]"}], ".", "ICube", ".", "VCube"}], 
+       ")"}], "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "1"}], "]"}], "]"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PE", "=", 
+   RowBox[{
+    RowBox[{"mBall", "*", "g", "*", 
+     RowBox[{"yBall", "[", "t", "]"}]}], "+", 
+    RowBox[{"mCube", "*", "g", "*", 
+     RowBox[{"yCube", "[", "t", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"L", "=", 
+   RowBox[{"KE", "-", "PE"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"p", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{"L", ",", 
+     RowBox[{"dq", "\[Transpose]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"H", "=", 
+   RowBox[{
+    RowBox[{"p", ".", "dq"}], "-", "L"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FBallx", "=", 
+   RowBox[{"k", "*", 
+    RowBox[{"(", 
+     RowBox[{"xBalld", "-", 
+      RowBox[{"xBall", "[", "t", "]"}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"FBally", "=", 
+    RowBox[{"k", "*", 
+     RowBox[{"(", 
+      RowBox[{"yBalld", "-", 
+       RowBox[{"yBall", "[", "t", "]"}]}], ")"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Rwb", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Cos", "[", 
+        RowBox[{"\[Theta]Cube", "[", "t", "]"}], "]"}], ",", 
+       RowBox[{"-", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"\[Theta]Cube", "[", "t", "]"}], "]"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Sin", "[", 
+        RowBox[{"\[Theta]Cube", "[", "t", "]"}], "]"}], ",", 
+       RowBox[{"Cos", "[", 
+        RowBox[{"\[Theta]Cube", "[", "t", "]"}], "]"}]}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gwb", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Cos", "[", 
+        RowBox[{"\[Theta]Cube", "[", "t", "]"}], "]"}], ",", 
+       RowBox[{"-", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"\[Theta]Cube", "[", "t", "]"}], "]"}]}], ",", 
+       RowBox[{"xCube", "[", "t", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Sin", "[", 
+        RowBox[{"\[Theta]Cube", "[", "t", "]"}], "]"}], ",", 
+       RowBox[{"Cos", "[", 
+        RowBox[{"\[Theta]Cube", "[", "t", "]"}], "]"}], ",", 
+       RowBox[{"yCube", "[", "t", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"UCube", "=", 
+   RowBox[{"Rwb", ".", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", "1", "}"}], ",", 
+      RowBox[{"{", "0", "}"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VCube", "=", 
+   RowBox[{"Rwb", ".", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", "0", "}"}], ",", 
+      RowBox[{"{", "1", "}"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pCube0", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"xCube", "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"yCube", "[", "t", "]"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pCubeA", "=", 
+   RowBox[{"pCube0", "+", 
+    RowBox[{
+     RowBox[{"lCube", "/", "2"}], "*", " ", "UCube"}], "+", 
+    RowBox[{
+     RowBox[{"wCube", "/", "2"}], "*", "VCube"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pCubeB", "=", 
+   RowBox[{"pCube0", "-", 
+    RowBox[{
+     RowBox[{"lCube", "/", "2"}], "*", " ", "UCube"}], "+", 
+    RowBox[{
+     RowBox[{"wCube", "/", "2"}], "*", "VCube"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pCubeC", "=", 
+   RowBox[{"pCube0", "-", 
+    RowBox[{
+     RowBox[{"lCube", "/", "2"}], "*", "UCube"}], "-", 
+    RowBox[{
+     RowBox[{"wCube", "/", "2"}], "*", "VCube"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pCubeD", "=", 
+   RowBox[{"pCube0", "+", 
+    RowBox[{
+     RowBox[{"lCube", "/", "2"}], "*", " ", "UCube"}], "-", 
+    RowBox[{
+     RowBox[{"wCube", "/", "2"}], "*", "VCube"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]GroundA", "=", 
+   RowBox[{"pCubeA", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]GroundB", "=", 
+   RowBox[{"pCubeB", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]GroundC", "=", 
+   RowBox[{"pCubeC", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[Phi]GroundD", "=", 
+    RowBox[{"pCubeD", "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"Eject", " ", "the", " ", "ball"}], ",", " ", 
+    RowBox[{"while", " ", "the", " ", "cube", " ", "falling"}]}], " ", 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EqEject", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"D", "[", 
+          RowBox[{"L", ",", 
+           RowBox[{
+            RowBox[{"xBall", "'"}], "[", "t", "]"}]}], "]"}], ",", "t"}], 
+        "]"}], "-", 
+       RowBox[{"D", "[", 
+        RowBox[{"L", ",", 
+         RowBox[{"xBall", "[", "t", "]"}]}], "]"}], "-", "FBallx"}], 
+      "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"D", "[", 
+          RowBox[{"L", ",", 
+           RowBox[{
+            RowBox[{"yBall", "'"}], "[", "t", "]"}]}], "]"}], ",", "t"}], 
+        "]"}], "-", 
+       RowBox[{"D", "[", 
+        RowBox[{"L", ",", 
+         RowBox[{"yBall", "[", "t", "]"}]}], "]"}], "-", "FBally"}], 
+      "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"D", "[", 
+          RowBox[{"L", ",", 
+           RowBox[{
+            RowBox[{"xCube", "'"}], "[", "t", "]"}]}], "]"}], ",", "t"}], 
+        "]"}], "-", 
+       RowBox[{"D", "[", 
+        RowBox[{"L", ",", 
+         RowBox[{"xCube", "[", "t", "]"}]}], "]"}]}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"D", "[", 
+          RowBox[{"L", ",", 
+           RowBox[{
+            RowBox[{"yCube", "'"}], "[", "t", "]"}]}], "]"}], ",", "t"}], 
+        "]"}], "-", 
+       RowBox[{"D", "[", 
+        RowBox[{"L", ",", 
+         RowBox[{"yCube", "[", "t", "]"}]}], "]"}]}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"D", "[", 
+          RowBox[{"L", ",", 
+           RowBox[{
+            RowBox[{"\[Theta]Cube", "'"}], "[", "t", "]"}]}], "]"}], ",", 
+         "t"}], "]"}], "-", 
+       RowBox[{"D", "[", 
+        RowBox[{"L", ",", 
+         RowBox[{"\[Theta]Cube", "[", "t", "]"}]}], "]"}]}], "\[Equal]", 
+      "0"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EltempEject", "=", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"EqEject", "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "&&", 
+      RowBox[{"EqEject", "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "&&", 
+      RowBox[{"EqEject", "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "&&", 
+      RowBox[{"EqEject", "[", 
+       RowBox[{"[", "4", "]"}], "]"}], "&&", 
+      RowBox[{"EqEject", "[", 
+       RowBox[{"[", "5", "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{"ddq", "\[Transpose]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ElEject", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBall", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempEject", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "1", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yBall", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempEject", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "2", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCube", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempEject", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "3", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yCube", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempEject", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "4", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempEject", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "5", ",", "2"}], "]"}], "]"}]}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"InitCon0", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"xBall", "[", "0", "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{"yBall", "[", "0", "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{"xCube", "[", "0", "]"}], "\[Equal]", "8"}], ",", 
+     RowBox[{
+      RowBox[{"yCube", "[", "0", "]"}], "\[Equal]", "6"}], ",", 
+     RowBox[{
+      RowBox[{"\[Theta]Cube", "[", "0", "]"}], "\[Equal]", "0.8"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBall", "'"}], "[", "0", "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yBall", "'"}], "[", "0", "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCube", "'"}], "[", "0", "]"}], "\[Equal]", 
+      RowBox[{"-", "2"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yCube", "'"}], "[", "0", "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "'"}], "[", "0", "]"}], "\[Equal]", "2"}]}], 
+    "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"solEject", "=", 
+    RowBox[{"NDSolve", "[", 
+     RowBox[{
+      RowBox[{"Join", "[", 
+       RowBox[{"ElEject", ",", "InitCon0"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"xBall", "[", "t", "]"}], ",", 
+        RowBox[{"yBall", "[", "t", "]"}], ",", 
+        RowBox[{"xCube", "[", "t", "]"}], ",", 
+        RowBox[{"yCube", "[", "t", "]"}], ",", 
+        RowBox[{"\[Theta]Cube", "[", "t", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "0", ",", "2"}], "}"}], ",", 
+      RowBox[{"Method", "\[Rule]", " ", 
+       RowBox[{"{", 
+        RowBox[{"\"\<EventLocator\>\"", ",", 
+         RowBox[{"\"\<Event\>\"", "\[Rule]", 
+          RowBox[{"xBalld", "-", 
+           RowBox[{"xBall", "[", "t", "]"}]}]}], ",", 
+         RowBox[{"\"\<EventAction\>\"", "\[RuleDelayed]", 
+          RowBox[{"Throw", "[", 
+           RowBox[{
+            RowBox[{"endEject", "=", "t"}], ",", "\"\<StopIntegration\>\""}], 
+           "]"}]}]}], "}"}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xBallout", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"xBall", "[", "t", "]"}], "/.", 
+     RowBox[{"solEject", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"yBallout", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"yBall", "[", "t", "]"}], "/.", 
+     RowBox[{"solEject", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "2"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxBallout", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"xBall", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solEject", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "1"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vyBallout", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"yBall", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solEject", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "2"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xCubeout", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"xCube", "[", "t", "]"}], "/.", 
+     RowBox[{"solEject", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "3"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"yCubeout", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"yCube", "[", "t", "]"}], "/.", 
+     RowBox[{"solEject", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "4"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]Cubeout", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[Theta]Cube", "[", "t", "]"}], "/.", 
+     RowBox[{"solEject", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "5"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxCubeout", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"xCube", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solEject", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "3"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vyCubeout", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"yCube", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solEject", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "4"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"v\[Theta]Cubeout", "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "'"}], "[", "t", "]"}], "/.", 
+      RowBox[{"D", "[", 
+       RowBox[{
+        RowBox[{"solEject", "[", 
+         RowBox[{"[", 
+          RowBox[{"1", ",", "5"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+     RowBox[{"t", "\[Rule]", "endEject"}]}]}], ";"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "After", " ", "ejection", " ", "and", " ", "before", " ", "colliding"}], 
+   " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xBallFlyb", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Inverse", "[", "gwb", "]"}], ".", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"xBall", "[", "t", "]"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"yBall", "[", "t", "]"}], "}"}], ",", 
+         RowBox[{"{", "1", "}"}]}], "}"}]}], ")"}], "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}], "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBall", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xBallFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yBall", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yBallFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xCubeFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yCubeFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"\[Theta]CubeFly", "[", "t", "]"}]}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"yBallFlyb", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Inverse", "[", "gwb", "]"}], ".", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"xBall", "[", "t", "]"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"yBall", "[", "t", "]"}], "}"}], ",", 
+         RowBox[{"{", "1", "}"}]}], "}"}]}], ")"}], "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "1"}], "]"}], "]"}], "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBall", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xBallFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yBall", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yBallFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xCubeFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yCubeFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"\[Theta]CubeFly", "[", "t", "]"}]}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]Collidea", "=", 
+   RowBox[{"yBallFlyb", "-", "rBall", "-", 
+    RowBox[{"wCube", "/", "2"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"LFly", "=", 
+   RowBox[{"L", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBall", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xBallFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yBall", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yBallFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xCubeFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yCubeFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"\[Theta]CubeFly", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"xBallFly", "'"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"yBallFly", "'"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCube", "'"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"xCubeFly", "'"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCube", "'"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"yCubeFly", "'"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]Cube", "'"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"\[Theta]CubeFly", "'"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xBall", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"xBallFly", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yBall", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"yBallFly", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCube", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"xCubeFly", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCube", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"yCubeFly", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]Cube", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"\[Theta]CubeFly", "''"}], "[", "t", "]"}]}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EqFly", "=", 
+   RowBox[{
+    RowBox[{"Thread", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"D", "[", 
+          RowBox[{"L", ",", 
+           RowBox[{"dq", "\[Transpose]"}]}], "]"}], ",", "t"}], "]"}], "-", 
+       RowBox[{"D", "[", 
+        RowBox[{"L", ",", 
+         RowBox[{"q", "\[Transpose]"}]}], "]"}]}], "\[Equal]", "0"}], "]"}], "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"xBall", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"xBallFly", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yBall", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"yBallFly", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCube", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"xCubeFly", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCube", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"yCubeFly", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]Cube", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"\[Theta]CubeFly", "''"}], "[", "t", "]"}]}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EltempFly", "=", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"EqFly", "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "&&", 
+      RowBox[{"EqFly", "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "&&", 
+      RowBox[{"EqFly", "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "&&", 
+      RowBox[{"EqFly", "[", 
+       RowBox[{"[", "4", "]"}], "]"}], "&&", 
+      RowBox[{"EqFly", "[", 
+       RowBox[{"[", "5", "]"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xBallFly", "''"}], "[", "t", "]"}], ",", 
+       RowBox[{
+        RowBox[{"yBallFly", "''"}], "[", "t", "]"}], ",", 
+       RowBox[{
+        RowBox[{"xCubeFly", "''"}], "[", "t", "]"}], ",", 
+       RowBox[{
+        RowBox[{"yCubeFly", "''"}], "[", "t", "]"}], ",", 
+       RowBox[{
+        RowBox[{"\[Theta]CubeFly", "''"}], "[", "t", "]"}]}], "}"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ElFly", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBallFly", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempFly", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "1", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yBallFly", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempFly", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "2", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeFly", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempFly", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "3", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yCubeFly", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempFly", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "4", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\[Theta]CubeFly", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempFly", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "5", ",", "2"}], "]"}], "]"}]}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"InitConFly", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"xBallFly", "[", "endEject", "]"}], "\[Equal]", "xBallout"}], 
+     ",", 
+     RowBox[{
+      RowBox[{"yBallFly", "[", "endEject", "]"}], "\[Equal]", "yBallout"}], 
+     ",", 
+     RowBox[{
+      RowBox[{"xCubeFly", "[", "endEject", "]"}], "\[Equal]", "xCubeout"}], 
+     ",", 
+     RowBox[{
+      RowBox[{"yCubeFly", "[", "endEject", "]"}], "\[Equal]", "yCubeout"}], 
+     ",", 
+     RowBox[{
+      RowBox[{"\[Theta]CubeFly", "[", "endEject", "]"}], "\[Equal]", 
+      "\[Theta]Cubeout"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBallFly", "'"}], "[", "endEject", "]"}], "\[Equal]", 
+      "vxBallout"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yBallFly", "'"}], "[", "endEject", "]"}], "\[Equal]", 
+      "vyBallout"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeFly", "'"}], "[", "endEject", "]"}], "\[Equal]", 
+      "vxCubeout"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yCubeFly", "'"}], "[", "endEject", "]"}], "\[Equal]", 
+      "vyCubeout"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\[Theta]CubeFly", "'"}], "[", "endEject", "]"}], "\[Equal]", 
+      "v\[Theta]Cubeout"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"solFly", "=", 
+    RowBox[{"NDSolve", "[", 
+     RowBox[{
+      RowBox[{"Join", "[", 
+       RowBox[{"ElFly", ",", "InitConFly"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"xBallFly", "[", "t", "]"}], ",", 
+        RowBox[{"yBallFly", "[", "t", "]"}], ",", 
+        RowBox[{"xCubeFly", "[", "t", "]"}], ",", 
+        RowBox[{"yCubeFly", "[", "t", "]"}], ",", 
+        RowBox[{"\[Theta]CubeFly", "[", "t", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "endEject", ",", "2"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Method", "\[Rule]", " ", 
+       RowBox[{"{", 
+        RowBox[{"\"\<EventLocator\>\"", ",", 
+         RowBox[{"\"\<Event\>\"", "\[Rule]", "\[Phi]Collidea"}], ",", 
+         RowBox[{"\"\<EventAction\>\"", "\[RuleDelayed]", 
+          RowBox[{"Throw", "[", 
+           RowBox[{
+            RowBox[{"endFly", "=", "t"}], ",", "\"\<StopIntegration\>\""}], 
+           "]"}]}]}], "}"}]}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", "Colliding", " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xBallCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"xBallFly", "[", "t", "]"}], "/.", 
+     RowBox[{"solFly", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"yBallCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"yBallFly", "[", "t", "]"}], "/.", 
+     RowBox[{"solFly", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "2"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxBallCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"xBallFly", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solFly", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "1"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vyBallCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"yBallFly", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solFly", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "2"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xCubeCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"xCubeFly", "[", "t", "]"}], "/.", 
+     RowBox[{"solFly", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "3"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"yCubeCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"yCubeFly", "[", "t", "]"}], "/.", 
+     RowBox[{"solFly", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "4"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]CubeCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[Theta]CubeFly", "[", "t", "]"}], "/.", 
+     RowBox[{"solFly", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "5"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxCubeCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"xCubeFly", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solFly", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "3"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vyCubeCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"yCubeFly", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solFly", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "4"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"v\[Theta]CubeCollidem", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"\[Theta]CubeFly", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solFly", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "5"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endFly"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xBallCollidep", "=", "xBallCollidem"}], ";", 
+  RowBox[{"yBallCollidep", "=", "yBallCollidem"}], ";", 
+  RowBox[{"xCubeCollidep", "=", "xCubeCollidem"}], ";", 
+  RowBox[{"yCubeCollidep", "=", "yCubeCollidem"}], ";", 
+  RowBox[{"\[Theta]CubeCollidep", "=", "\[Theta]CubeCollidem"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"HCollidem", "=", 
+   RowBox[{"H", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBall", "[", "t", "]"}], "\[Rule]", "xBallCollidem"}], ",", 
+      RowBox[{
+       RowBox[{"yBall", "[", "t", "]"}], "\[Rule]", "yBallCollidem"}], ",", 
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", " ", "xCubeCollidem"}], 
+      ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", " ", "yCubeCollidem"}], 
+      ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", " ", 
+       "\[Theta]CubeCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxBallCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vyBallCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCube", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxCubeCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCube", "'"}], "[", "t", "]"}], "\[Rule]", " ", 
+       "vyCubeCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]Cube", "'"}], "[", "t", "]"}], "\[Rule]", " ", 
+       "v\[Theta]CubeCollidem"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"HCollidep", "=", 
+   RowBox[{"H", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBall", "[", "t", "]"}], "\[Rule]", "xBallCollidep"}], ",", 
+      RowBox[{
+       RowBox[{"yBall", "[", "t", "]"}], "\[Rule]", "yBallCollidep"}], ",", 
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", " ", "xCubeCollidep"}], 
+      ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", " ", "yCubeCollidep"}], 
+      ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", " ", 
+       "\[Theta]CubeCollidep"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxBallCollidep"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vyBallCollidep"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCube", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxCubeCollidep"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCube", "'"}], "[", "t", "]"}], "\[Rule]", " ", 
+       "vyCubeCollidep"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]Cube", "'"}], "[", "t", "]"}], "\[Rule]", " ", 
+       "v\[Theta]CubeCollidep"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pCollide\[Tau]m", "=", 
+   RowBox[{"p", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBall", "[", "t", "]"}], "\[Rule]", "xBallCollidem"}], ",", 
+      RowBox[{
+       RowBox[{"yBall", "[", "t", "]"}], "\[Rule]", "yBallCollidem"}], ",", 
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", " ", "xCubeCollidem"}], 
+      ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", " ", "yCubeCollidem"}], 
+      ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", " ", 
+       "\[Theta]CubeCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxBallCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vyBallCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCube", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxCubeCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCube", "'"}], "[", "t", "]"}], "\[Rule]", " ", 
+       "vyCubeCollidem"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]Cube", "'"}], "[", "t", "]"}], "\[Rule]", " ", 
+       "v\[Theta]CubeCollidem"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"pCollide\[Tau]p", "=", 
+    RowBox[{"p", "/.", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xBall", "[", "t", "]"}], "\[Rule]", "xBallCollidep"}], ",", 
+       RowBox[{
+        RowBox[{"yBall", "[", "t", "]"}], "\[Rule]", "yBallCollidep"}], ",", 
+       RowBox[{
+        RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", " ", "xCubeCollidep"}], 
+       ",", 
+       RowBox[{
+        RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", " ", "yCubeCollidep"}], 
+       ",", 
+       RowBox[{
+        RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", " ", 
+        "\[Theta]CubeCollidep"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"xBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+        "vxBallCollidep"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"yBall", "'"}], "[", "t", "]"}], "\[Rule]", 
+        "vyBallCollidep"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"xCube", "'"}], "[", "t", "]"}], "\[Rule]", 
+        "vxCubeCollidep"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"yCube", "'"}], "[", "t", "]"}], "\[Rule]", " ", 
+        "vyCubeCollidep"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"\[Theta]Cube", "'"}], "[", "t", "]"}], "\[Rule]", " ", 
+        "v\[Theta]CubeCollidep"}]}], "}"}]}]}], ";"}], 
+  " "}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xBallb", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"Inverse", "[", "gwb", "]"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"xBall", "[", "t", "]"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"yBall", "[", "t", "]"}], "}"}], ",", 
+        RowBox[{"{", "1", "}"}]}], "}"}]}], ")"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"yBallb", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"Inverse", "[", "gwb", "]"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"xBall", "[", "t", "]"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"yBall", "[", "t", "]"}], "}"}], ",", 
+        RowBox[{"{", "1", "}"}]}], "}"}]}], ")"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]Collide", "=", 
+   RowBox[{"yBallb", "-", "rBall", "-", 
+    RowBox[{"wCube", "/", "2"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"d\[Phi]Collide", "=", 
+   RowBox[{
+    RowBox[{"D", "[", 
+     RowBox[{"\[Phi]Collide", ",", 
+      RowBox[{"q", "\[Transpose]"}]}], "]"}], "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBall", "[", "t", "]"}], "\[Rule]", "xBallCollidep"}], ",", 
+      RowBox[{
+       RowBox[{"yBall", "[", "t", "]"}], "\[Rule]", "yBallCollidep"}], ",", 
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", " ", "xCubeCollidep"}], 
+      ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", " ", "yCubeCollidep"}], 
+      ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", " ", 
+       "\[Theta]CubeCollidep"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"impactEqCollide", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"pCollide\[Tau]p", "-", "pCollide\[Tau]m", "-", 
+         RowBox[{"\[Lambda]Collide", "*", "d\[Phi]Collide"}]}], ")"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"pCollide\[Tau]p", "-", "pCollide\[Tau]m", "-", 
+         RowBox[{"\[Lambda]Collide", "*", "d\[Phi]Collide"}]}], ")"}], "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"pCollide\[Tau]p", "-", "pCollide\[Tau]m", "-", 
+         RowBox[{"\[Lambda]Collide", "*", "d\[Phi]Collide"}]}], ")"}], "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"pCollide\[Tau]p", "-", "pCollide\[Tau]m", "-", 
+         RowBox[{"\[Lambda]Collide", "*", "d\[Phi]Collide"}]}], ")"}], "[", 
+       RowBox[{"[", "4", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"pCollide\[Tau]p", "-", "pCollide\[Tau]m", "-", 
+         RowBox[{"\[Lambda]Collide", "*", "d\[Phi]Collide"}]}], ")"}], "[", 
+       RowBox[{"[", "5", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"HCollidep", "-", "HCollidem"}], ")"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "\[Equal]", "0"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"impactEltempCollide", "=", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"impactEqCollide", "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "&&", 
+      RowBox[{"impactEqCollide", "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "&&", 
+      RowBox[{"impactEqCollide", "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "&&", 
+      RowBox[{"impactEqCollide", "[", 
+       RowBox[{"[", "4", "]"}], "]"}], "&&", 
+      RowBox[{"impactEqCollide", "[", 
+       RowBox[{"[", "5", "]"}], "]"}], "&&", 
+      RowBox[{"impactEqCollide", "[", 
+       RowBox[{"[", "6", "]"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "\[Lambda]Collide", ",", "vxBallCollidep", ",", "vyBallCollidep", ",", 
+       "vxCubeCollidep", ",", "vyCubeCollidep", ",", 
+       "v\[Theta]CubeCollidep"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxBallCollidep", "=", 
+   RowBox[{"impactEltempCollide", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "2", ",", "2"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vyBallCollidep", "=", 
+   RowBox[{"impactEltempCollide", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "3", ",", "2"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxCubeCollidep", "=", 
+   RowBox[{"impactEltempCollide", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "4", ",", "2"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vyCubeCollidep", "=", 
+   RowBox[{"impactEltempCollide", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "5", ",", "2"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"v\[Theta]CubeCollidep", "=", 
+    RowBox[{"impactEltempCollide", "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ",", "6", ",", "2"}], "]"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", "Departure", " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Two", " ", "groups", " ", "of", " ", "equation"}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", "Ball", " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"qBall", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"xBallDepar", "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"yBallDepar", "[", "t", "]"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dqBall", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{"qBall", ",", "t"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxBallDepar", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{
+     RowBox[{"xBallDepar", "[", "t", "]"}], ",", "t"}], "]"}]}], ";", 
+  RowBox[{"vyBallDepar", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{
+     RowBox[{"yBallDepar", "[", "t", "]"}], ",", "t"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"KEBall", "=", 
+   RowBox[{
+    RowBox[{"1", "/", "2"}], "*", "mBall", "*", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"vxBallDepar", "^", "2"}], "+", 
+      RowBox[{"vyBallDepar", "^", "2"}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PEBall", "=", 
+   RowBox[{"mBall", "*", "g", "*", 
+    RowBox[{"yBallDepar", "[", "t", "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"LBall", "=", 
+   RowBox[{"KEBall", "-", "PEBall"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EqBall", "=", 
+   RowBox[{"Thread", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"D", "[", 
+       RowBox[{
+        RowBox[{"D", "[", 
+         RowBox[{"LBall", ",", 
+          RowBox[{"dqBall", "\[Transpose]"}]}], "]"}], ",", "t"}], "]"}], "-", 
+      RowBox[{"D", "[", 
+       RowBox[{"LBall", ",", 
+        RowBox[{"qBall", "\[Transpose]"}]}], "]"}]}], "\[Equal]", "0"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EltempBall", "=", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"EqBall", "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "&&", 
+      RowBox[{"EqBall", "[", 
+       RowBox[{"[", "2", "]"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xBallDepar", "''"}], "[", "t", "]"}], ",", 
+       RowBox[{
+        RowBox[{"yBallDepar", "''"}], "[", "t", "]"}]}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ElBall", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBallDepar", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempBall", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "1", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yBallDepar", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempBall", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "2", ",", "2"}], "]"}], "]"}]}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"InitConBall", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"xBallDepar", "[", "endFly", "]"}], "\[Equal]", 
+      "xBallCollidep"}], ",", 
+     RowBox[{
+      RowBox[{"yBallDepar", "[", "endFly", "]"}], "\[Equal]", 
+      "yBallCollidep"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xBallDepar", "'"}], "[", "endFly", "]"}], "\[Equal]", 
+      "vxBallCollidep"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yBallDepar", "'"}], "[", "endFly", "]"}], "\[Equal]", 
+      "vyBallCollidep"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"solBall", "=", 
+    RowBox[{"NDSolve", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Join", "[", 
+         RowBox[{"ElBall", ",", "InitConBall"}], "]"}], ",", 
+        RowBox[{"WhenEvent", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"yBallDepar", "[", "t", "]"}], "-", "rBall"}], "\[Equal]",
+            "0"}], ",", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"yBallDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+           RowBox[{"-", 
+            RowBox[{
+             RowBox[{"yBallDepar", "'"}], "[", "t", "]"}]}]}]}], "]"}]}], 
+       "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"xBallDepar", "[", "t", "]"}], ",", 
+        RowBox[{"yBallDepar", "[", "t", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "endFly", ",", "2"}], "}"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", "Cube", " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"qCube", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"xCubeDepar", "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"yCubeDepar", "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dqCube", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{"qCube", ",", "t"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VCubeDepar", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"xCubeDepar", "'"}], "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"yCubeDepar", "'"}], "[", "t", "]"}], "}"}], ",", 
+     RowBox[{"{", "0", "}"}], ",", 
+     RowBox[{"{", "0", "}"}], ",", 
+     RowBox[{"{", "0", "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "'"}], "[", "t", "]"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"KECube", "=", 
+   RowBox[{
+    RowBox[{"1", "/", "2"}], "*", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"VCubeDepar", "\[Transpose]"}], ".", "ICube", ".", 
+       "VCubeDepar"}], ")"}], "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PECube", "=", 
+   RowBox[{"mCube", "*", "g", "*", 
+    RowBox[{"yCubeDepar", "[", "t", "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"LCube", "=", 
+   RowBox[{"KECube", "-", "PECube"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pCube", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{"LCube", ",", 
+     RowBox[{"dqCube", "\[Transpose]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"HCube", "=", 
+   RowBox[{
+    RowBox[{"pCube", ".", "qCube"}], "-", "LCube"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]BoundA", "=", 
+   RowBox[{"\[Phi]GroundA", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xCubeDepar", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yCubeDepar", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}]}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]BoundB", "=", 
+   RowBox[{"\[Phi]GroundB", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xCubeDepar", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yCubeDepar", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}]}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]BoundC", "=", 
+   RowBox[{"\[Phi]GroundC", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xCubeDepar", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yCubeDepar", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}]}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]BoundD", "=", 
+   RowBox[{"\[Phi]GroundD", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"xCubeDepar", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"yCube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"yCubeDepar", "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]Cube", "[", "t", "]"}], "\[Rule]", 
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}]}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EqCube", "=", 
+   RowBox[{"Thread", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"D", "[", 
+       RowBox[{
+        RowBox[{"D", "[", 
+         RowBox[{"LCube", ",", 
+          RowBox[{"dqCube", "\[Transpose]"}]}], "]"}], ",", "t"}], "]"}], "-", 
+      RowBox[{"D", "[", 
+       RowBox[{"LCube", ",", 
+        RowBox[{"qCube", "\[Transpose]"}]}], "]"}]}], "\[Equal]", "0"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EltempCube", "=", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"EqCube", "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "&&", 
+      RowBox[{"EqCube", "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "&&", 
+      RowBox[{"EqCube", "[", 
+       RowBox[{"[", "3", "]"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCubeDepar", "''"}], "[", "t", "]"}], ",", 
+       RowBox[{
+        RowBox[{"yCubeDepar", "''"}], "[", "t", "]"}], ",", 
+       RowBox[{
+        RowBox[{"\[Theta]CubeDepar", "''"}], "[", "t", "]"}]}], "}"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ElCube", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempCube", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "1", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yCubeDepar", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempCube", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "2", ",", "2"}], "]"}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "''"}], "[", "t", "]"}], "\[Equal]", 
+      RowBox[{"EltempCube", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "3", ",", "2"}], "]"}], "]"}]}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"InitConCube", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"xCubeDepar", "[", "endFly", "]"}], "\[Equal]", 
+      "xCubeCollidep"}], ",", 
+     RowBox[{
+      RowBox[{"yCubeDepar", "[", "endFly", "]"}], "\[Equal]", 
+      "yCubeCollidep"}], ",", 
+     RowBox[{
+      RowBox[{"\[Theta]CubeDepar", "[", "endFly", "]"}], "\[Equal]", 
+      "\[Theta]CubeCollidep"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "'"}], "[", "endFly", "]"}], "\[Equal]", 
+      "vxCubeCollidep"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yCubeDepar", "'"}], "[", "endFly", "]"}], "\[Equal]", 
+      "vyCubeCollidep"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "'"}], "[", "endFly", "]"}], "\[Equal]", 
+      "v\[Theta]CubeCollidep"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"solCube", "=", 
+    RowBox[{"NDSolve", "[", 
+     RowBox[{
+      RowBox[{"Join", "[", 
+       RowBox[{"ElCube", ",", "InitConCube"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"xCubeDepar", "[", "t", "]"}], ",", 
+        RowBox[{"yCubeDepar", "[", "t", "]"}], ",", 
+        RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "endFly", ",", "2"}], "}"}], ",", 
+      RowBox[{"Method", "\[Rule]", " ", 
+       RowBox[{"{", 
+        RowBox[{"\"\<EventLocator\>\"", ",", 
+         RowBox[{"\"\<Event\>\"", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+           "\[Phi]BoundA", ",", "\[Phi]BoundB", ",", "\[Phi]BoundC", ",", 
+            "\[Phi]BoundD"}], "}"}]}], ",", 
+         RowBox[{"\"\<EventAction\>\"", "\[RuleDelayed]", 
+          RowBox[{"Throw", "[", 
+           RowBox[{
+            RowBox[{"endDepar", "=", "t"}], ",", "\"\<StopIntegration\>\""}], 
+           "]"}]}]}], "}"}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xCubeBoundm", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"xCubeDepar", "[", "t", "]"}], "/.", 
+     RowBox[{"solCube", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endDepar"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxCubeBoundm", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"xCubeDepar", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solCube", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "1"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endDepar"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"yCubeBoundm", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"yCubeDepar", "[", "t", "]"}], "/.", 
+     RowBox[{"solCube", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "2"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endDepar"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vyCubeBoundm", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"yCubeDepar", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solCube", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "2"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endDepar"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]CubeBoundm", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "/.", 
+     RowBox[{"solCube", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "3"}], "]"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endDepar"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"v\[Theta]CubeBoundm", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"\[Theta]CubeDepar", "'"}], "[", "t", "]"}], "/.", 
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"solCube", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "3"}], "]"}], "]"}], ",", "t"}], "]"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "endDepar"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xCubeBoundp", "=", "xCubeBoundm"}], ";", 
+  RowBox[{"yCubeBoundp", "=", "yCubeBoundm"}], ";", 
+  RowBox[{"\[Theta]CubeBoundp", "=", "\[Theta]CubeBoundm"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pCubeBound\[Tau]m", "=", 
+   RowBox[{"pCube", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "[", "t", "]"}], "\[Rule]", "xCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"yCubeDepar", "[", "t", "]"}], "\[Rule]", "yCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "\[Rule]", 
+       "\[Theta]CubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vyCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]CubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "v\[Theta]CubeBoundm"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pCubeBound\[Tau]p", "=", 
+   RowBox[{"pCube", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "[", "t", "]"}], "\[Rule]", "xCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{"yCubeDepar", "[", "t", "]"}], "\[Rule]", "yCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "\[Rule]", 
+       "\[Theta]CubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vyCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]CubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "v\[Theta]CubeBoundp"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"HCubeBoundm", "=", 
+   RowBox[{"HCube", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "[", "t", "]"}], "\[Rule]", "xCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"yCubeDepar", "[", "t", "]"}], "\[Rule]", "yCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "\[Rule]", 
+       "\[Theta]CubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vyCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]CubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "v\[Theta]CubeBoundm"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"HCubeBoundp", "=", 
+   RowBox[{"HCube", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "[", "t", "]"}], "\[Rule]", "xCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{"yCubeDepar", "[", "t", "]"}], "\[Rule]", "yCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "\[Rule]", 
+       "\[Theta]CubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vxCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "vyCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]CubeDepar", "'"}], "[", "t", "]"}], "\[Rule]", 
+       "v\[Theta]CubeBoundp"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]BoundATest", "=", 
+   RowBox[{"\[Phi]BoundA", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "[", "t", "]"}], "\[Rule]", "xCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"yCubeDepar", "[", "t", "]"}], "\[Rule]", "yCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "\[Rule]", 
+       "\[Theta]CubeBoundm"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]BoundNow", "=", "\[Phi]BoundA"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]BoundBTest", "=", 
+   RowBox[{"\[Phi]BoundB", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "[", "t", "]"}], "\[Rule]", "xCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"yCubeDepar", "[", "t", "]"}], "\[Rule]", "yCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "\[Rule]", 
+       "\[Theta]CubeBoundm"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Abs", "[", "\[Phi]BoundBTest", "]"}], "<", 
+     RowBox[{"Abs", "[", "\[Phi]BoundATest", "]"}]}], ",", 
+    RowBox[{"\[Phi]BoundNow", "=", "\[Phi]BoundB"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]BoundCTest", "=", 
+   RowBox[{"\[Phi]BoundC", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "[", "t", "]"}], "\[Rule]", "xCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"yCubeDepar", "[", "t", "]"}], "\[Rule]", "yCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "\[Rule]", 
+       "\[Theta]CubeBoundm"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Abs", "[", "\[Phi]BoundCTest", "]"}], "<", 
+     RowBox[{"Abs", "[", "\[Phi]BoundBTest", "]"}]}], ",", 
+    RowBox[{"\[Phi]BoundNow", "=", "\[Phi]BoundC"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Phi]BoundDTest", "=", 
+   RowBox[{"\[Phi]BoundD", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "[", "t", "]"}], "\[Rule]", "xCubeBoundm"}], ",",
+       
+      RowBox[{
+       RowBox[{"yCubeDepar", "[", "t", "]"}], "\[Rule]", "yCubeBoundm"}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "\[Rule]", 
+       "\[Theta]CubeBoundm"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Abs", "[", "\[Phi]BoundDTest", "]"}], "<", 
+     RowBox[{"Abs", "[", "\[Phi]BoundCTest", "]"}]}], ",", 
+    RowBox[{"\[Phi]BoundNow", "=", "\[Phi]BoundD"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"d\[Phi]BoundNow", "=", 
+   RowBox[{
+    RowBox[{"D", "[", 
+     RowBox[{"\[Phi]BoundNow", ",", 
+      RowBox[{"qCube", "\[Transpose]"}]}], "]"}], "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeDepar", "[", "t", "]"}], "\[Rule]", "xCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{"yCubeDepar", "[", "t", "]"}], "\[Rule]", "yCubeBoundp"}], ",", 
+      RowBox[{
+       RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "\[Rule]", 
+       "\[Theta]CubeBoundp"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"impactEqBound", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"pCubeBound\[Tau]p", "-", "pCubeBound\[Tau]m", "-", 
+         RowBox[{"\[Lambda]CubeBound", "*", "d\[Phi]BoundNow"}]}], ")"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"pCubeBound\[Tau]p", "-", "pCubeBound\[Tau]m", "-", 
+         RowBox[{"\[Lambda]CubeBound", "*", "d\[Phi]BoundNow"}]}], ")"}], "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"pCubeBound\[Tau]p", "-", "pCubeBound\[Tau]m", "-", 
+         RowBox[{"\[Lambda]CubeBound", "*", "d\[Phi]BoundNow"}]}], ")"}], "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"HCubeBoundp", "-", 
+         RowBox[{"energyRate", "*", "HCubeBoundm"}]}], ")"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "\[Equal]", "0"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"impactEltempBound", "=", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"impactEqBound", "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "&&", 
+      RowBox[{"impactEqBound", "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "&&", 
+      RowBox[{"impactEqBound", "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "&&", 
+      RowBox[{"impactEqBound", "[", 
+       RowBox[{"[", "4", "]"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "\[Lambda]CubeBound", ",", "vxCubeBoundp", ",", "vyCubeBoundp", ",", 
+       "v\[Theta]CubeBoundp"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vxCubeBoundp", "=", 
+   RowBox[{"impactEltempBound", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "2", ",", "2"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vyCubeBoundp", "=", 
+   RowBox[{"impactEltempBound", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "3", ",", "2"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"v\[Theta]CubeBoundp", "=", 
+   RowBox[{"impactEltempBound", "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ",", "4", ",", "2"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ElCubeBound", "=", 
+   RowBox[{"ElCube", "/.", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"xCubeDepar", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"xCubeBound", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"yCubeDepar", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"yCubeBound", "''"}], "[", "t", "]"}]}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"\[Theta]CubeDepar", "''"}], "[", "t", "]"}], "\[Rule]", 
+       RowBox[{
+        RowBox[{"\[Theta]CubeBound", "''"}], "[", "t", "]"}]}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"InitConBound", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"xCubeBound", "[", "endDepar", "]"}], "\[Equal]", 
+      "xCubeBoundp"}], ",", 
+     RowBox[{
+      RowBox[{"yCubeBound", "[", "endDepar", "]"}], "\[Equal]", 
+      "yCubeBoundp"}], ",", 
+     RowBox[{
+      RowBox[{"\[Theta]CubeBound", "[", "endDepar", "]"}], "\[Equal]", 
+      "\[Theta]CubeBoundp"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"xCubeBound", "'"}], "[", "endDepar", "]"}], "\[Equal]", 
+      "vxCubeBoundp"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"yCubeBound", "'"}], "[", "endDepar", "]"}], "\[Equal]", 
+      "vyCubeBoundp"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\[Theta]CubeBound", "'"}], "[", "endDepar", "]"}], "\[Equal]",
+       "v\[Theta]CubeBoundp"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"solBound", "=", 
+    RowBox[{"NDSolve", "[", 
+     RowBox[{
+      RowBox[{"Join", "[", 
+       RowBox[{"ElCubeBound", ",", "InitConBound"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"xCubeBound", "[", "t", "]"}], ",", 
+        RowBox[{"yCubeBound", "[", "t", "]"}], ",", 
+        RowBox[{"\[Theta]CubeBound", "[", "t", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "endDepar", ",", "2"}], "}"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", "Animate", " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xsolBallEject", "=", 
+   RowBox[{
+    RowBox[{"xBall", "[", "t", "]"}], "/.", 
+    RowBox[{"solEject", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ysolBallEject", "=", 
+   RowBox[{
+    RowBox[{"yBall", "[", "t", "]"}], "/.", 
+    RowBox[{"solEject", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "2"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xsolCubeEject", "=", 
+   RowBox[{
+    RowBox[{"xCube", "[", "t", "]"}], "/.", 
+    RowBox[{"solEject", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "3"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ysolCubeEject", "=", 
+   RowBox[{
+    RowBox[{"yCube", "[", "t", "]"}], "/.", 
+    RowBox[{"solEject", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "4"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]solCubeEject", "=", 
+   RowBox[{
+    RowBox[{"\[Theta]Cube", "[", "t", "]"}], "/.", 
+    RowBox[{"solEject", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "5"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xsolBallFly", "=", 
+   RowBox[{
+    RowBox[{"xBallFly", "[", "t", "]"}], "/.", 
+    RowBox[{"solFly", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ysolBallFly", "=", 
+   RowBox[{
+    RowBox[{"yBallFly", "[", "t", "]"}], "/.", 
+    RowBox[{"solFly", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "2"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xsolCubeFly", "=", 
+   RowBox[{
+    RowBox[{"xCubeFly", "[", "t", "]"}], "/.", 
+    RowBox[{"solFly", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "3"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ysolCubeFly", "=", 
+   RowBox[{
+    RowBox[{"yCubeFly", "[", "t", "]"}], "/.", 
+    RowBox[{"solFly", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "4"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]solCubeFly", "=", 
+   RowBox[{
+    RowBox[{"\[Theta]CubeFly", "[", "t", "]"}], "/.", 
+    RowBox[{"solFly", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "5"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xsolBallDepar", "=", 
+   RowBox[{
+    RowBox[{"xBallDepar", "[", "t", "]"}], "/.", 
+    RowBox[{"solBall", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ysolBallDepar", "=", 
+   RowBox[{
+    RowBox[{"yBallDepar", "[", "t", "]"}], "/.", 
+    RowBox[{"solBall", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "2"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xsolCubeDepar", "=", 
+   RowBox[{
+    RowBox[{"xCubeDepar", "[", "t", "]"}], "/.", 
+    RowBox[{"solCube", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ysolCubeDepar", "=", 
+   RowBox[{
+    RowBox[{"yCubeDepar", "[", "t", "]"}], "/.", 
+    RowBox[{"solCube", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "2"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]solCubeDepar", "=", 
+   RowBox[{
+    RowBox[{"\[Theta]CubeDepar", "[", "t", "]"}], "/.", 
+    RowBox[{"solCube", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "3"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xsolCubeBound", "=", 
+   RowBox[{
+    RowBox[{"xCubeBound", "[", "t", "]"}], "/.", 
+    RowBox[{"solBound", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "1"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ysolCubeBound", "=", 
+   RowBox[{
+    RowBox[{"yCubeBound", "[", "t", "]"}], "/.", 
+    RowBox[{"solBound", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "2"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]solCubeBound", "=", 
+   RowBox[{
+    RowBox[{"\[Theta]CubeBound", "[", "t", "]"}], "/.", 
+    RowBox[{"solBound", "[", 
+     RowBox[{"[", 
+      RowBox[{"1", ",", "3"}], "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xsolBallTotal", "=", 
+   RowBox[{"Piecewise", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"xsolBallEject", ",", 
+         RowBox[{"0", "\[LessEqual]", "t", "<", "endEject"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"xsolBallFly", ",", 
+         RowBox[{"endEject", "\[LessEqual]", "t", "<", "endFly"}]}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"xsolBallDepar", ",", 
+         RowBox[{"endFly", "\[LessEqual]", "t", "<", "2"}]}], "}"}]}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ysolBallTotal", "=", 
+   RowBox[{"Piecewise", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"ysolBallEject", ",", 
+         RowBox[{"0", "\[LessEqual]", "t", "<", "endEject"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"ysolBallFly", ",", 
+         RowBox[{"endEject", "\[LessEqual]", "t", "<", "endFly"}]}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"ysolBallDepar", ",", 
+         RowBox[{"endFly", "\[LessEqual]", "t", "<", "2"}]}], "}"}]}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xsolCubeTotal", "=", 
+   RowBox[{"Piecewise", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"xsolCubeEject", ",", 
+         RowBox[{"0", "\[LessEqual]", "t", "<", "endEject"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"xsolCubeFly", ",", 
+         RowBox[{"endEject", "\[LessEqual]", "t", "<", "endFly"}]}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"xsolCubeDepar", ",", 
+         RowBox[{"endFly", "\[LessEqual]", "t", "<", "endDepar"}]}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"xsolCubeBound", ",", 
+         RowBox[{"endDepar", "\[LessEqual]", "t", "<", "2"}]}], "}"}]}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ysolCubeTotal", "=", 
+   RowBox[{"Piecewise", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"ysolCubeEject", ",", 
+         RowBox[{"0", "\[LessEqual]", "t", "<", "endEject"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"ysolCubeFly", ",", 
+         RowBox[{"endEject", "\[LessEqual]", "t", "<", "endFly"}]}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"ysolCubeDepar", ",", 
+         RowBox[{"endFly", "\[LessEqual]", "t", "<", "endDepar"}]}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"ysolCubeBound", ",", 
+         RowBox[{"endDepar", "\[LessEqual]", "t", "<", "2"}]}], "}"}]}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Theta]solCubeTotal", "=", 
+   RowBox[{"Piecewise", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\[Theta]solCubeEject", ",", 
+         RowBox[{"0", "\[LessEqual]", "t", "<", "endEject"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\[Theta]solCubeFly", ",", 
+         RowBox[{"endEject", "\[LessEqual]", "t", "<", "endFly"}]}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"\[Theta]solCubeDepar", ",", 
+         RowBox[{"endFly", "\[LessEqual]", "t", "<", "endDepar"}]}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"\[Theta]solCubeBound", ",", 
+         RowBox[{"endDepar", "\[LessEqual]", "t", "<", "2"}]}], "}"}]}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pxContactTotal", "=", 
+   RowBox[{"Piecewise", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"xsolBallEject", "-", "0.3"}], ",", 
+         RowBox[{"0", "\[LessEqual]", "t", "<", "endEject"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", 
+         RowBox[{"endEject", "\[LessEqual]", "t", "<", "2"}]}], "}"}]}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"pyContactTotal", "=", 
+    RowBox[{"Piecewise", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"ysolBallEject", "-", "0.3"}], ",", 
+          RowBox[{"0", "\[LessEqual]", "t", "<", "endEject"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"1.2", ",", 
+          RowBox[{"endEject", "\[LessEqual]", "t", "<", "2"}]}], "}"}]}], 
+       "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "0", ",", "2"}], "}"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"UCubex", "=", 
+   RowBox[{"Cos", "[", "\[Theta]solCubeTotal", "]"}]}], ";", 
+  RowBox[{"UCubey", "=", 
+   RowBox[{"Sin", "[", "\[Theta]solCubeTotal", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VCubex", "=", 
+   RowBox[{"-", 
+    RowBox[{"Sin", "[", "\[Theta]solCubeTotal", "]"}]}]}], ";", 
+  RowBox[{"VCubey", "=", 
+   RowBox[{"Cos", "[", "\[Theta]solCubeTotal", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"BallX", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{"xsolBallTotal", "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"BallY", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{"ysolBallTotal", "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CubeAX", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"xsolCubeTotal", "+", 
+     RowBox[{
+      RowBox[{"lCube", "/", "2"}], "*", "UCubex"}], "+", 
+     RowBox[{
+      RowBox[{"wCube", "/", "2"}], "*", "VCubex"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CubeAY", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"ysolCubeTotal", "+", 
+     RowBox[{
+      RowBox[{"lCube", "/", "2"}], "*", "UCubey"}], "+", 
+     RowBox[{
+      RowBox[{"wCube", "/", "2"}], "*", "VCubey"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CubeBX", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"xsolCubeTotal", "-", 
+     RowBox[{
+      RowBox[{"lCube", "/", "2"}], "*", "UCubex"}], "+", 
+     RowBox[{
+      RowBox[{"wCube", "/", "2"}], "*", "VCubex"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CubeBY", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"ysolCubeTotal", "-", 
+     RowBox[{
+      RowBox[{"lCube", "/", "2"}], "*", "UCubey"}], "+", 
+     RowBox[{
+      RowBox[{"wCube", "/", "2"}], "*", "VCubey"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CubeCX", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"xsolCubeTotal", "-", 
+     RowBox[{
+      RowBox[{"lCube", "/", "2"}], "*", "UCubex"}], "-", 
+     RowBox[{
+      RowBox[{"wCube", "/", "2"}], "*", "VCubex"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CubeCY", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"ysolCubeTotal", "-", 
+     RowBox[{
+      RowBox[{"lCube", "/", "2"}], "*", "UCubey"}], "-", 
+     RowBox[{
+      RowBox[{"wCube", "/", "2"}], "*", "VCubey"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CubeDX", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"xsolCubeTotal", "+", 
+     RowBox[{
+      RowBox[{"lCube", "/", "2"}], "*", "UCubex"}], "-", 
+     RowBox[{
+      RowBox[{"wCube", "/", "2"}], "*", "VCubex"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CubeDY", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{
+    RowBox[{"ysolCubeTotal", "+", 
+     RowBox[{
+      RowBox[{"lCube", "/", "2"}], "*", "UCubey"}], "-", 
+     RowBox[{
+      RowBox[{"wCube", "/", "2"}], "*", "VCubey"}]}], "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"pContactX", "[", "\[Tau]_", "]"}], ":=", 
+   RowBox[{"pxContactTotal", "/.", 
+    RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"pContactY", "[", "\[Tau]_", "]"}], ":=", 
+    RowBox[{"pyContactTotal", "/.", 
+     RowBox[{"t", "\[Rule]", "\[Tau]"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"Animate", "[", 
+  RowBox[{
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"Graphics", "[", 
+       RowBox[{"{", 
+        RowBox[{"Thick", ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"CubeAX", "[", "\[Tau]", "]"}], ",", 
+              RowBox[{"CubeAY", "[", "\[Tau]", "]"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"CubeBX", "[", "\[Tau]", "]"}], ",", 
+              RowBox[{"CubeBY", "[", "\[Tau]", "]"}]}], "}"}]}], "}"}], "]"}],
+          ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"CubeBX", "[", "\[Tau]", "]"}], ",", 
+              RowBox[{"CubeBY", "[", "\[Tau]", "]"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"CubeCX", "[", "\[Tau]", "]"}], ",", 
+              RowBox[{"CubeCY", "[", "\[Tau]", "]"}]}], "}"}]}], "}"}], "]"}],
+          ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"CubeCX", "[", "\[Tau]", "]"}], ",", 
+              RowBox[{"CubeCY", "[", "\[Tau]", "]"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"CubeDX", "[", "\[Tau]", "]"}], ",", 
+              RowBox[{"CubeDY", "[", "\[Tau]", "]"}]}], "}"}]}], "}"}], "]"}],
+          ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"CubeDX", "[", "\[Tau]", "]"}], ",", 
+              RowBox[{"CubeDY", "[", "\[Tau]", "]"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"CubeAX", "[", "\[Tau]", "]"}], ",", 
+              RowBox[{"CubeAY", "[", "\[Tau]", "]"}]}], "}"}]}], "}"}], "]"}],
+          ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "3"}], ",", "0"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"12", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"Brown", ",", 
+           RowBox[{"Line", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"pContactX", "[", "\[Tau]", "]"}], ",", 
+                RowBox[{"pContactY", "[", "\[Tau]", "]"}]}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"0.8", ",", "1"}], "}"}]}], "}"}], "]"}], ",", 
+           RowBox[{"Line", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"pContactX", "[", "\[Tau]", "]"}], ",", 
+                RowBox[{"pContactY", "[", "\[Tau]", "]"}]}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"1.2", ",", "1.4"}], "}"}]}], "}"}], "]"}]}], "}"}], 
+         ",", "Red", ",", 
+         RowBox[{"Circle", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"BallX", "[", "\[Tau]", "]"}], ",", 
+             RowBox[{"BallY", "[", "\[Tau]", "]"}]}], "}"}], ",", "rBall"}], 
+          "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"Thick", ",", 
+           RowBox[{"Line", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"1", ",", "0.5"}], "}"}]}], "}"}], ",", 
+             RowBox[{"VertexColors", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"Blue", ",", "Purple"}], "}"}]}]}], "]"}], ",", 
+           "Purple", ",", 
+           RowBox[{"Line", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0.5"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"0.8", ",", "1"}], "}"}]}], "}"}], "]"}], ",", 
+           RowBox[{"Line", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"1", ",", "0.5"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"1.2", ",", "1.4"}], "}"}]}], "}"}], "]"}]}], "}"}]}], 
+        "}"}], "]"}], "}"}], ",", 
+     RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "3"}], ",", "12"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "5"}], ",", "10"}], "}"}]}], "}"}]}], ",", 
+     RowBox[{"Frame", "\[Rule]", "True"}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\[Tau]", ",", "0", ",", "1.6"}], "}"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.6899691832962184`*^9, 3.689969263577779*^9}, {
+   3.6899707124917374`*^9, 3.6899707329169407`*^9}, 3.6901511571862698`*^9}]
+},
+WindowSize->{1350, 685},
+WindowMargins->{{-2, Automatic}, {Automatic, 0}},
+FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 120, 2, 30, "Input"],
+Cell[681, 24, 88371, 2604, 4534, "Input"]
+}
+]
+*)
+
