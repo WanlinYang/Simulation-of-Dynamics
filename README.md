@@ -8,3 +8,6 @@ The system consists of
 * a slingshot ejecting the ball
 * a flying ball
 * a falling brick
+
+After running the code, the animation of the system could be viewed:
+![Animation](Animation.gif)
