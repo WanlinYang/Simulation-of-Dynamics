@@ -9,6 +9,6 @@ The system consists of
 * a flying ball
 * a falling brick
 
-After running the code, the animation of the system could be viewed:
+After running with no more than 5 seconds, the animation of the system could be viewed:
 
 ![Animation](Animation.gif)
